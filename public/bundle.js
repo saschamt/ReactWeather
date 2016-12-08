@@ -24936,25 +24936,43 @@
 
 	  getInitialState: function getInitialState() {
 	    return {
-	      location: 'Miami',
-	      temp: 30
+	      isLoading: false
 	    };
 	  },
 	  handleSearch: function handleSearch(location) {
 	    var that = this;
+
+	    this.setState({ isLoading: true });
+
 	    openWeatherMap.getTemp(location).then(function (temp) {
 	      that.setState({
 	        location: location,
-	        temp: temp
+	        temp: temp,
+	        isLoading: false
 	      });
 	    }, function (errorMessage) {
+	      that.setState({ isLoading: false });
 	      alert(errorMessage);
 	    });
 	  },
 	  render: function render() {
 	    var _state = this.state,
+	        isLoading = _state.isLoading,
 	        location = _state.location,
 	        temp = _state.temp;
+
+
+	    function renderMessage() {
+	      if (isLoading) {
+	        return React.createElement(
+	          'h3',
+	          null,
+	          'Fetching weather...'
+	        );
+	      } else if (temp && location) {
+	        return React.createElement(WeatherMessage, { location: location, temp: temp });
+	      }
+	    }
 
 	    return React.createElement(
 	      'div',
@@ -24965,7 +24983,7 @@
 	        'Weather Component'
 	      ),
 	      React.createElement(WeatherForm, { onSearch: this.handleSearch }),
-	      React.createElement(WeatherMessage, { location: location, temp: temp })
+	      renderMessage()
 	    );
 	  }
 	});
@@ -25038,7 +25056,7 @@
 	      null,
 	      'It\'s ',
 	      temp,
-	      ' degress Fahrenheit in ',
+	      ' degress Celsius in ',
 	      location
 	    );
 	  }
@@ -25054,7 +25072,7 @@
 
 	var axios = __webpack_require__(222);
 
-	var OPEN_WEATHER_MAP_URL = 'http://api.openweathermap.org/data/2.5/weather?appid=1f9ef2b490965fd83ea3ec28a729d972&units=imperial';
+	var OPEN_WEATHER_MAP_URL = 'http://api.openweathermap.org/data/2.5/weather?appid=1f9ef2b490965fd83ea3ec28a729d972&units=metric';
 
 	// 1f9ef2b490965fd83ea3ec28a729d972
 
@@ -25064,7 +25082,7 @@
 	    var requestUrl = OPEN_WEATHER_MAP_URL + '&q=' + encodedLocation;
 
 	    return axios.get(requestUrl).then(function (res) {
-	      if (res.data.cod && response.data.message) {
+	      if (res.data.cod && res.data.message) {
 	        throw new Error(res.data.message);
 	      } else {
 	        return res.data.main.temp;
