@@ -1,11 +1,8 @@
-const React = require('react');
+var React = require('react');
 
-
-// arrow functions inherit 'this' from parent! so 'this.props' becomes 'props'
-// then, with the advanced destructuring, i can directly pull temp and location
 var WeatherMessage = ({temp, location}) => {
   return (
-    <p>It's {temp} degress Celsius in {location}</p>
+    <h3 className="text-center">It's it {temp} in {location}.</h3>
   )
 };
 

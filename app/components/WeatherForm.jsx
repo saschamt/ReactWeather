@@ -1,4 +1,4 @@
-const React = require('react');
+var React = require('react');
 
 var WeatherForm = React.createClass({
   onFormSubmit: function (e) {
@@ -13,12 +13,14 @@ var WeatherForm = React.createClass({
   },
   render: function () {
     return (
-      <form onSubmit={this.onFormSubmit}>
-        <div><input type="text" placeholder="Enter city name" ref="location"/></div>
-        <div><button type="submit">Get Weather</button></div>
-      </form>
-    )
+        <div>
+          <form onSubmit={this.onFormSubmit}>
+            <input type="text" ref="location"/>
+            <button className="button expanded hollow">Get Weather</button>
+          </form>
+        </div>
+    );
   }
-})
+});
 
 module.exports = WeatherForm;
